@@ -8,12 +8,11 @@ WORKDIR /install
 
 COPY requirements.txt .
 
-# Aktualizacja narzedzi bazowych Pythona aby wyeliminowac podatnosci
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Brutalne wymuszenie najnowszych narzedzi Pythona i usuniecie starego setuptools
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel jaraco.context
 
 # Instalacja zaleznosci aplikacji
 RUN pip install --no-cache-dir --prefix=/install/deps -r requirements.txt
-
 
 # ETAP 2: Obraz docelowy
 FROM python:3.11-alpine
