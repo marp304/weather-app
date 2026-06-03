@@ -8,7 +8,7 @@ WORKDIR /install
 
 COPY requirements.txt .
 
-# Aktualizacja narzedzi bazowych Pythona aby usunac podatnosci (wheel, jaraco)
+# Aktualizacja narzedzi bazowych Pythona aby wyeliminowac podatnosci
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # Instalacja zaleznosci aplikacji
