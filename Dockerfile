@@ -5,14 +5,11 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /install
-
 COPY requirements.txt .
-
-# Brutalne wymuszenie najnowszych narzedzi Pythona i usuniecie starego setuptools
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel jaraco.context
 
 # Instalacja zaleznosci aplikacji
 RUN pip install --no-cache-dir --prefix=/install/deps -r requirements.txt
+
 
 # ETAP 2: Obraz docelowy
 FROM python:3.11-alpine
@@ -23,6 +20,12 @@ LABEL org.opencontainers.image.title="Aplikacja Pogodowa"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/usr/local/lib/python3.11/site-packages
+
+# Twarde usuniecie domyslnych, podatnych narzedzi instalacyjnych z systemu
+RUN pip uninstall -y pip setuptools wheel && \
+    rm -rf /usr/local/lib/python3.11/site-packages/setuptools* \
+           /usr/local/lib/python3.11/site-packages/pip* \
+           /usr/local/lib/python3.11/site-packages/wheel*
 
 RUN adduser -D weatheruser
 WORKDIR /app
